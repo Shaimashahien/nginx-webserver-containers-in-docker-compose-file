@@ -1,0 +1,45 @@
+ version: '3'
+ services:
+   redis:
+    image: 'redis'
+    ports:
+     - "6379:6379"
+    container_name: redis
+
+   web1:
+    build: ./web01/
+    ports:
+     - "81:5000"
+    volumes:
+     - ./project:/home/shaima/app/web01
+    depends_on:
+     - redis
+    container_name: web1   
+  
+
+
+   web2:
+    build: ./web02/
+    ports:
+     - "82:5000"
+    volumes:
+     - ./project:/home/shaima/app/web02
+    depends_on:
+     - redis
+    container_name: web2
+    
+
+
+   nginx:
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - ./project:/home/shaima/app/nginx 
+    depends_on:
+      - redis
+      - web1
+      - web2
+    container_name: nginx
+  
+
